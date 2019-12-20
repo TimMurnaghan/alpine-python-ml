@@ -26,11 +26,10 @@ RUN apk update && \
     pip install --no-cache-dir \
     numpy==1.17.0 && \
 	pip install --no-cache-dir \
-    scipy \
+    scipy==1.3.3 \
     scikit-learn==0.21.2 \
     pandas==0.25.0 \
     matplotlib \
-    boto3 \
     py-multibase==0.1.2 \
     wheel \
     psutil \
@@ -52,7 +51,12 @@ RUN apk update && \
 	pip install --no-cache-dir \
 	bpemb && \
 	find /usr/local/lib/python3.*/ -name 'tests' -exec rm -r '{}' + && \
-	apk del .build-deps
+	find /usr/local/lib/python3.*/ -name 'test' -exec rm -r '{}' + && \
+	find /usr/local/lib/python3.*/ -name '__pycache*' -exec rm -r '{}' + && \
+	apk del .build-deps && \
+	rm -rf /root/.cache && \
+	(echo y | pip uninstall Cython)
+	
 
 COPY . .
 
